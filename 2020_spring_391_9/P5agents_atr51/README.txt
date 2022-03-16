@@ -2,21 +2,13 @@
 
 A few things that I'd like to make known:
 
--One issue that my code was having is that for some reason, the agent has 200 wood less than it thinks it does. I've shared this problem with Madhu and we have not been able to determine
-what is causing it. I suspect that, somehow, when a parallel harvest action is being evaluated more wood is being added to the STRIPS representation then in SEPIA. However, it has been
-consistently 200 wood, and not gold. I've struggled to find the cause of this problem but to no avail. So, I eventually decided to artificially add 200 wood to the isGoal() check to offset
-this.
+-One issue that my code was having is that for some reason, the agent has 200 wood less than it thinks it does. I've shared this problem with Madhu and we have not been able to determine what is causing it. I suspect that, somehow, when a parallel harvest action is being evaluated more wood is being added to the STRIPS representation then in SEPIA. However, it has been consistently 200 wood, and not gold. I've struggled to find the cause of this problem but to no avail. So, I eventually decided to artificially add 200 wood to the isGoal() check to offset this.
 
--It seems to me that the large map is 200 wood short of having the required 2000 wood for peasants to collect. However, I don't think this issue is related to the previous issue, oddly enough.
-This is because when I set the scenario to have a wood requirement of 2000, even with the artificial offset in GameState, a plan is not able to be found. Furthermore, I checked the inventories of
-the peasants at the end of the scenario and they were not carrying anything. So, only 1800 wood collected out of 2000, with no more tree icons left on the map and peasants with empty inventories.
-Even thought I can't find a link from this to the previous issue, it would certainly be a freaky coincidence if they were not related somehow (what's so special about 200 wood). This makes me think
-that the issue may be something with recognizing and encapsulating resources into STRIPS.
+-It seems to me that the large map is 200 wood short of having the required 2000 wood for peasants to collect. However, I don't think this issue is related to the previous issue, oddly enough. This is because when I set the scenario to have a wood requirement of 2000, even with the artificial offset in GameState, a plan is not able to be found. Furthermore, I checked the inventories of the peasants at the end of the scenario and they were not carrying anything. So, only 1800 wood collected out of 2000, with no more tree icons left on the map and peasants with empty inventories. Even thought I can't find a link from this to the previous issue, it would certainly be a freaky coincidence if they were not related somehow (what's so special about 200 wood). This makes me think that the issue may be something with recognizing and encapsulating resources into STRIPS.
 
 -The execution time was calculated by summing the total amount of time my program spent in iterations of the middleStep() method in PEagent.
 
 -I overrided the toString() method of every class that implements StripsAction, so the plan is printed out in English instead of just the memory locations of the action objects.
-
 
 
 (a) 
