@@ -16,7 +16,7 @@ import edu.cwru.sepia.environment.model.state.State;
 import edu.cwru.sepia.environment.model.state.Unit.UnitView;
 
 public class PEAgent extends Agent {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private Stack<StripsAction> plan = null;
 
@@ -35,95 +35,76 @@ public class PEAgent extends Agent {
      */
     @Override
     public Map<Integer, Action> middleStep(State.StateView stateView, History.HistoryView historyView) {
-    	
-    	Map<Integer, Action> actionMap = new HashMap<Integer, Action>();
 
-    	if(plan.isEmpty()) 
-    	{
-    		return actionMap;
-    	}
-    	
-    	int previousTurnNumber = stateView.getTurnNumber() - 1;
-    	
-    	if(previousTurnNumber < 0) 
-    	{
-    		addNextAction(actionMap, stateView);
-    		return actionMap;
-    	}
+        Map<Integer, Action> actionMap = new HashMap<Integer, Action>();
 
-		Map<Integer, ActionResult> previousActions = historyView.getCommandFeedback(playernum, previousTurnNumber);
-		boolean done = false;
-		while(!done) {
-			if(plan.empty()) 
-			{
-				done = true;
-			} 
-			else 
-			{
-				StripsAction next = plan.peek();
-				ActionResult previous = previousActions.get(next.getUnitId());
-				if(lastActionFailed(previous)) 
-				{
-					actionMap.put(previous.getAction().getUnitId(), previous.getAction());
-				}
-				if(!peasantAvailable(actionMap, next, previous)) 
-				{
-					done = true;
-				} 
-				else 
-				{
-					if(waitOnBuild(actionMap, next)) 
-					{ 
-						done = true;
-					} 
-					else 
-					{
-						addNextAction(actionMap, stateView);
-					}
-				}
-			}
-		}
-    	return actionMap;
+        if (plan.isEmpty()) {
+            return actionMap;
+        }
+
+        int previousTurnNumber = stateView.getTurnNumber() - 1;
+
+        if (previousTurnNumber < 0) {
+            addNextAction(actionMap, stateView);
+            return actionMap;
+        }
+
+        Map<Integer, ActionResult> previousActions = historyView.getCommandFeedback(playernum, previousTurnNumber);
+        boolean done = false;
+        while (!done) {
+            if (plan.empty()) {
+                done = true;
+            } else {
+                StripsAction next = plan.peek();
+                ActionResult previous = previousActions.get(next.getUnitId());
+                if (lastActionFailed(previous)) {
+                    actionMap.put(previous.getAction().getUnitId(), previous.getAction());
+                }
+                if (!peasantAvailable(actionMap, next, previous)) {
+                    done = true;
+                } else {
+                    if (waitOnBuild(actionMap, next)) {
+                        done = true;
+                    } else {
+                        addNextAction(actionMap, stateView);
+                    }
+                }
+            }
+        }
+        return actionMap;
     }
-    
-    private boolean peasantAvailable(Map<Integer, Action> actionMap, StripsAction next, ActionResult previous) 
-    {
-		return !actionMap.containsKey(next.getUnitId()) && 
-				!(previous != null && previous.getFeedback().ordinal() == ActionFeedback.INCOMPLETE.ordinal());
-	}
 
-	private boolean lastActionFailed(ActionResult previous) 
-	{
-		return previous != null && previous.getFeedback() == ActionFeedback.FAILED;
-	}
+    private boolean peasantAvailable(Map<Integer, Action> actionMap, StripsAction next, ActionResult previous) {
+        return !actionMap.containsKey(next.getUnitId()) && !(previous != null && previous.getFeedback().ordinal() == ActionFeedback.INCOMPLETE.ordinal());
+    }
 
-	private boolean waitOnBuild(Map<Integer, Action> actionMap, StripsAction next) 
-	{
-		return next.getUnitId() == GameState.townhallId && !actionMap.isEmpty();
-	}
+    private boolean lastActionFailed(ActionResult previous) {
+        return previous != null && previous.getFeedback() == ActionFeedback.FAILED;
+    }
+
+    private boolean waitOnBuild(Map<Integer, Action> actionMap, StripsAction next) {
+        return next.getUnitId() == GameState.townhallId && !actionMap.isEmpty();
+    }
 
     private void addNextAction(Map<Integer, Action> actionMap, State.StateView state) {
-    	StripsAction action = plan.pop();
-    	Action sepiaAction = null;
-    	if(!action.isDirectedAction()) 
-    	{
-    		sepiaAction = action.createSepiaAction(null);
-    	} 
-    	else 
-    	{
-    		UnitView peasant = state.getUnit(action.getUnitId());
-    		if(peasant == null) {
-    			plan.push(action);
-    			return;
-    		}
-    		Position peasantPos = new Position(peasant.getXPosition(), peasant.getYPosition());
-    		Position destinationPos = action.getPositionForDirection();
-    		sepiaAction = action.createSepiaAction(peasantPos.getDirection(destinationPos));    		
-    	}
-		actionMap.put(sepiaAction.getUnitId(), sepiaAction);
-	}
-    
-	@Override
+        StripsAction action = plan.pop();
+        Action sepiaAction = null;
+        if (!action.isDirectedAction()) {
+            sepiaAction = action.createSepiaAction(null);
+        } else {
+            UnitView peasant = state.getUnit(action.getUnitId());
+            if (peasant == null) {
+                plan.push(action);
+                return;
+            }
+            Position peasantPos = new Position(peasant.getXPosition(), peasant.getYPosition());
+            Position destinationPos = action.getPositionForDirection();
+            sepiaAction = action.createSepiaAction(peasantPos.getDirection(destinationPos));
+        }
+        actionMap.put(sepiaAction.getUnitId(), sepiaAction);
+    }
+
+    @Override
     public void terminalStep(State.StateView stateView, History.HistoryView historyView) {
 
     }

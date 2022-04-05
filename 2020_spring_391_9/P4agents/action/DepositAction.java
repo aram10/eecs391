@@ -7,46 +7,46 @@ import edu.cwru.sepia.agent.planner.Position;
 import edu.cwru.sepia.util.Direction;
 
 public class DepositAction implements StripsAction {
-	
-	int peasantId;
-	Position peasantPos;
-	Position townHallPos = GameState.townhallPos;
-	boolean hasResource;
-	
-	public DepositAction(Peasant peasant) {
-		this.peasantId = peasant.getId();
-		this.peasantPos = peasant.getPosition();
-		this.hasResource = peasant.hasResource();
-	}
-	
-	@Override
-	public boolean preconditionsMet(GameState state) {
-		return hasResource && peasantPos.equals(townHallPos);
-	}
 
-	@Override
-	public void applyAction(GameState state) {
-		state.applyDepositAction(this, peasantId);
-	}
+    int peasantId;
+    Position peasantPos;
+    Position townHallPos = GameState.townhallPos;
+    boolean hasResource;
 
-	@Override
-	public boolean isDirectedAction() {
-		return true;
-	}
-	
-	@Override
-	public Position getPositionForDirection() {
-		return townHallPos;
-	}
-	
-	@Override
-	public Action createSepiaAction(Direction direction) {
-		return Action.createPrimitiveDeposit(peasantId, direction);
-	}
-	
-	@Override
-	public int getUnitId() {
-		return peasantId;	
-	}
+    public DepositAction(Peasant peasant) {
+        this.peasantId = peasant.getId();
+        this.peasantPos = peasant.getPosition();
+        this.hasResource = peasant.hasResource();
+    }
+
+    @Override
+    public boolean preconditionsMet(GameState state) {
+        return hasResource && peasantPos.equals(townHallPos);
+    }
+
+    @Override
+    public void applyAction(GameState state) {
+        state.applyDepositAction(this, peasantId);
+    }
+
+    @Override
+    public boolean isDirectedAction() {
+        return true;
+    }
+
+    @Override
+    public Position getPositionForDirection() {
+        return townHallPos;
+    }
+
+    @Override
+    public Action createSepiaAction(Direction direction) {
+        return Action.createPrimitiveDeposit(peasantId, direction);
+    }
+
+    @Override
+    public int getUnitId() {
+        return peasantId;
+    }
 
 }

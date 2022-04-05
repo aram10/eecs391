@@ -12,52 +12,48 @@ import edu.cwru.sepia.util.Direction;
  */
 public interface StripsAction {
 
-    /**    
-     * 
+    /**
      * @param state GameState to check if action is applicable
      * @return true if apply can be called, false otherwise
      */
     public boolean preconditionsMet(GameState state);
 
     /**
-     *
      * @param state State to apply action to
      * @return State resulting from successful action application.
      */
     public default GameState apply(GameState state) {
-    	applyAction(state);
-    	updateState(state);
-    	return state;
+        applyAction(state);
+        updateState(state);
+        return state;
     }
-    
+
     public default void updateState(GameState state) {
-    	state.updatePlanAndCost(this);
+        state.updatePlanAndCost(this);
     }
 
-	public void applyAction(GameState state);
-    
+    public void applyAction(GameState state);
+
     public default boolean isDirectedAction() {
-		return false;
-	}
-    
-    public default Position getPositionForDirection() {
-    	return null;
+        return false;
     }
-	
-	/**
-	 * 
-	 * @param direction is ignored if not a directed action
-	 * @return a SepiaAction of this action
-	 */
-	public Action createSepiaAction(Direction direction);
 
-	/**
-	 * 
-	 * @return the id of the unit to perform the action
-	 */
-	public int getUnitId();
-	
-	public default double getCost() {
-		return 1;
-	}
+    public default Position getPositionForDirection() {
+        return null;
+    }
+
+    /**
+     * @param direction is ignored if not a directed action
+     * @return a SepiaAction of this action
+     */
+    public Action createSepiaAction(Direction direction);
+
+    /**
+     * @return the id of the unit to perform the action
+     */
+    public int getUnitId();
+
+    public default double getCost() {
+        return 1;
+    }
 }

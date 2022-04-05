@@ -15,9 +15,9 @@ import java.util.*;
  */
 public class PlannerAgent extends Agent {
 
-	private static final long serialVersionUID = 1L;
-	
-	final int requiredWood;
+    private static final long serialVersionUID = 1L;
+
+    final int requiredWood;
     final int requiredGold;
     final boolean buildPeasants;
     Stack<StripsAction> plan = new Stack<StripsAction>();
@@ -28,7 +28,7 @@ public class PlannerAgent extends Agent {
     public PlannerAgent(int playernum, String[] params) {
         super(playernum);
 
-        if(params.length < 3) {
+        if (params.length < 3) {
             System.err.println("You must specify the required wood and gold amounts and whether peasants should be built");
         }
 
@@ -45,7 +45,7 @@ public class PlannerAgent extends Agent {
 
         Stack<StripsAction> plan = AstarSearch(new GameState(stateView, playernum, requiredGold, requiredWood, buildPeasants));
 
-        if(plan == null) {
+        if (plan == null) {
             System.err.println("No plan was found");
             System.exit(1);
             return null;
@@ -63,7 +63,7 @@ public class PlannerAgent extends Agent {
 
     @Override
     public Map<Integer, Action> middleStep(State.StateView stateView, History.HistoryView historyView) {
-        if(peAgent == null) {
+        if (peAgent == null) {
             System.err.println("Planning failed. No PEAgent initialized.");
             return null;
         }
@@ -95,58 +95,47 @@ public class PlannerAgent extends Agent {
      * @return The plan or null if no plan is found.
      */
     private Stack<StripsAction> AstarSearch(GameState startState) {
-    	
-    	PriorityQueue<GameState> frontierQueue = new PriorityQueue<GameState>();
-		Set<GameState> frontierSet = new HashSet<GameState>();
-    	Set<GameState> exploredSet = new HashSet<GameState>();
-    	frontierQueue.add(startState);
-		frontierSet.add(startState);
-		
-		while(!frontierQueue.isEmpty()) 
-		{ 
-			GameState current = frontierQueue.remove();
-			frontierSet.remove(current);
-			
-			if(current.isGoal()) 
-			{
-				return current.getPlan();
-			}
-			
-			exploredSet.add(current);
-			for(GameState child : current.generateChildren())
-			{
-				if(!exploredSet.contains(child))
-				{
-					if(!frontierSet.contains(child)) 
-					{					
-						frontierQueue.add(child);
-						frontierSet.add(child);
-					} 
-					else 
-					{
-						GameState first = null;
-						for(GameState possible : frontierSet) 
-						{
-							if(possible.equals(child)) 
-							{
-								first = possible;
-							}
-						}
-						if(first.getCost() > child.getCost()) 
-						{
-							frontierQueue.remove(first);
-							frontierQueue.add(child);
-							frontierSet.remove(first);
-							frontierSet.add(child);
-						}
-					}
-				}
-			}
-		}
-		return null;
+
+        PriorityQueue<GameState> frontierQueue = new PriorityQueue<GameState>();
+        Set<GameState> frontierSet = new HashSet<GameState>();
+        Set<GameState> exploredSet = new HashSet<GameState>();
+        frontierQueue.add(startState);
+        frontierSet.add(startState);
+
+        while (!frontierQueue.isEmpty()) {
+            GameState current = frontierQueue.remove();
+            frontierSet.remove(current);
+
+            if (current.isGoal()) {
+                return current.getPlan();
+            }
+
+            exploredSet.add(current);
+            for (GameState child : current.generateChildren()) {
+                if (!exploredSet.contains(child)) {
+                    if (!frontierSet.contains(child)) {
+                        frontierQueue.add(child);
+                        frontierSet.add(child);
+                    } else {
+                        GameState first = null;
+                        for (GameState possible : frontierSet) {
+                            if (possible.equals(child)) {
+                                first = possible;
+                            }
+                        }
+                        if (first.getCost() > child.getCost()) {
+                            frontierQueue.remove(first);
+                            frontierQueue.add(child);
+                            frontierSet.remove(first);
+                            frontierSet.add(child);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
 
     }
-
 
 
     /**
@@ -159,7 +148,7 @@ public class PlannerAgent extends Agent {
      * @param plan Stack of Strips Actions that are written to the text file.
      */
     @SuppressWarnings("unchecked")
-	private void savePlan(Stack<StripsAction> plan) {
+    private void savePlan(Stack<StripsAction> plan) {
         if (plan == null) {
             System.err.println("Cannot save null plan");
             return;
@@ -177,7 +166,7 @@ public class PlannerAgent extends Agent {
             outputWriter = new PrintWriter(outputFile.getAbsolutePath());
 
             Stack<StripsAction> tempPlan = (Stack<StripsAction>) plan.clone();
-            while(!tempPlan.isEmpty()) {
+            while (!tempPlan.isEmpty()) {
                 outputWriter.println(tempPlan.pop().toString());
             }
         } catch (FileNotFoundException e) {
@@ -185,8 +174,7 @@ public class PlannerAgent extends Agent {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (outputWriter != null)
-                outputWriter.close();
+            if (outputWriter != null) outputWriter.close();
         }
     }
 }

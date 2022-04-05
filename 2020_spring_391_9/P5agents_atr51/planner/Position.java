@@ -7,11 +7,11 @@ import java.util.List;
 
 /**
  * Created by Devin on 3/15/15.
- *
+ * <p>
  * I've provided you with a simple Position class with some helper methods. Use this for any place you need to track
  * a location. If you need modify the methods and add new ones. If you make changes add a note here about what was
  * changed and why.
- *
+ * <p>
  * This class is immutable, meaning any changes creates an entirely separate copy.
  */
 public class Position {
@@ -116,36 +116,21 @@ public class Position {
         int yDiff = position.y - y;
 
         // figure out the direction the footman needs to move in
-        if(xDiff == 1 && yDiff == 1)
-        {
+        if (xDiff == 1 && yDiff == 1) {
             return Direction.SOUTHEAST;
-        }
-        else if(xDiff == 1 && yDiff == 0)
-        {
+        } else if (xDiff == 1 && yDiff == 0) {
             return Direction.EAST;
-        }
-        else if(xDiff == 1 && yDiff == -1)
-        {
+        } else if (xDiff == 1 && yDiff == -1) {
             return Direction.NORTHEAST;
-        }
-        else if(xDiff == 0 && yDiff == 1)
-        {
+        } else if (xDiff == 0 && yDiff == 1) {
             return Direction.SOUTH;
-        }
-        else if(xDiff == 0 && yDiff == -1)
-        {
+        } else if (xDiff == 0 && yDiff == -1) {
             return Direction.NORTH;
-        }
-        else if(xDiff == -1 && yDiff == 1)
-        {
+        } else if (xDiff == -1 && yDiff == 1) {
             return Direction.SOUTHWEST;
-        }
-        else if(xDiff == -1 && yDiff == 0)
-        {
+        } else if (xDiff == -1 && yDiff == 0) {
             return Direction.WEST;
-        }
-        else if(xDiff == -1 && yDiff == -1)
-        {
+        } else if (xDiff == -1 && yDiff == -1) {
             return Direction.NORTHWEST;
         }
 
